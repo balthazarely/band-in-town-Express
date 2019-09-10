@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 // food is the name of our database
 // that is automatically created
-mongoose.connect('mongodb://localhost/showscout3', {
+mongoose.connect('mongodb://localhost/showscout5', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false

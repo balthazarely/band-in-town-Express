@@ -16,9 +16,9 @@ router.post('/home', async (req, res) => {
     const foundUser = await User.findById(req.session.userId)
 
     foundUser.favArtists.push(req.body)
-    console.log("new Fav",req.body )
+    // console.log("new Fav",req.body )
     foundUser.save(req.body)
-    console.log(foundUser)
+    // console.log(foundUser)
 
     res.json({
       status: {
@@ -40,28 +40,63 @@ router.post('/home', async (req, res) => {
 
 
 // Delete route
-router.put('/home/:newFav', async (req, res) => {
+router.put('/home/:newFav', (req, res) => {
+
+  console.log("trying to delete a newFav");
 
   try {
 
-      const findUser = await User.updateOne(
+      // const findUser = await User.updateOne(
 
-            { _id: req.session.userId },
-            { $pull: { favArtists: {newFav: req.params.newFav} } },
-            { multi: true }
-        )
+      //       { _id: req.session.userId },
+      //       { $pull: { favArtists: {newFav: req.params.newFav} } },
+      //       { multi: true }
+      //   )
 
-      console.log(findUser)
-      console.log(findUser.favArtists.length, " < after delete")
-      console.log("Deleting this Fav", req.params.newFav )
+      console.log("finding user with id of " + req.session.userId);
+      User.findById(req.session.userId, (err, foundUser) =>
+      {
+        if (err)
+        {
+          console.log(err);
+        }
+        else {
+          //change the user's favArtists array
+          
+          console.log("found user " + foundUser.username);
 
-      res.json({
-        status: {
-            code: 200,
-            message: "resource deleted successfully"
-          },
-          data: findUser
+          console.log("deleting fav " + req.params.newFav);
+
+          for (let i = 0; i < foundUser.favArtists.length; i++)
+          {
+            if (foundUser.favArtists[i].newFav == req.params.newFav)
+            {
+              console.log("found this fav in the user's fav list, deleting it");
+              foundUser.favArtists.splice(i, 1);
+              break;
+            }
+          }
+
+          foundUser.save();
+
+          console.log("done");
+
+          res.json({
+          status: {
+              code: 200,
+              message: "resource deleted successfully"
+            },
+            data: foundUser
+          });
+        }
       });
+
+
+      // console.log(findUser)
+      // console.log(findUser.favArtists.length, " < after delete")
+      // console.log("Deleting this Fav", req.params.newFav )
+
+      
   } catch(err){
     res.send(err);
   }
@@ -74,7 +109,7 @@ router.get('/home', async (req, res, next) => {
 
     try {
 
-      const findUser = await User.findById(req.session);
+      const findUser = await User.findById(req.session.userId);
       console.log("this is the GET user route", findUser )
 
       
