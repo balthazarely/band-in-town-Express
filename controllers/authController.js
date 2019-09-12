@@ -35,7 +35,6 @@ router.post('/home', async (req, res) => {
 });
 
 
-// other idea. should we add an id to the array item in the first step?
 
 
 
@@ -124,6 +123,8 @@ router.get('/home', async (req, res, next) => {
 
     }
 });
+
+
 
 
 

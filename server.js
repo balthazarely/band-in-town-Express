@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express');
 const app = express();
 const bodyParser  = require('body-parser');
@@ -44,6 +45,6 @@ const authController  = require('./controllers/authController');
 // app.use('/api/v1/employee', employeeController);
 app.use('/auth', authController);
 
-app.listen(process.env.PORT || 9000, () => {
+app.listen(process.env.PORT, () => {
   console.log('listening on port 9000');
 });
